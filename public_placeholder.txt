@@ -1,0 +1,1 @@
+Você pode colocar logos e imagens próprias em /public.

@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum OrderStatus {
+  PENDENTE
+  PAGO
+  CANCELADO
+}
+
+model Lead {
+  id             String         @id @default(cuid())
+  name           String
+  email          String
+  whatsapp       String
+  emailVerified  Boolean        @default(false)
+  createdAt      DateTime       @default(now())
+  otp            EmailOtp?
+  orders         Order[]
+  @@index([email])
+}
+
+model EmailOtp {
+  id          String   @id @default(cuid())
+  leadId      String   @unique
+  codeHash    String
+  expiresAt   DateTime
+  attempts    Int      @default(0)
+  usedAt      DateTime?
+  createdAt   DateTime @default(now())
+  lead        Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+}
+
+model Order {
+  id                    String      @id @default(cuid())
+  leadId                String
+  productName           String
+  amountCents           Int
+  status                OrderStatus @default(PENDENTE)
+  preferenceId          String?
+  paymentId             String?     @unique
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+  lead                  Lead        @relation(fields: [leadId], references: [id])
+  @@index([status, createdAt])
+}
