@@ -49,15 +49,6 @@ Preencha `.env` com `DATABASE_URL`, `APP_SECRET`, `NEXT_PUBLIC_SITE_URL`, `NEXT_
 
 `docker-compose.yml` sobe PostgreSQL. O `Dockerfile` constrói a aplicação. Para compor uma imagem funcional, configure variáveis no ambiente e execute as migrações antes de iniciar o serviço.
 
-## Antes de entregar/publicar
-
-- Troque nome, fotos, preços, telefone de WhatsApp e textos demonstrativos.
-- Configure SMTP e credenciais de teste do Mercado Pago.
-- Configure a URL pública e o webhook no painel do Mercado Pago.
-- **Valide a assinatura do webhook** de acordo com a documentação oficial do Mercado Pago antes de produção.
-- Adicione rate limiting aos endpoints de OTP, proteção contra abuso e autenticação à área administrativa.
-- Implemente e proteja dashboard de leads/pedidos, comprovante PDF, Google Analytics, Microsoft Clarity, alertas Discord, testes de integração e documentação OpenAPI.
-- O CI requer que o build e os testes passem; configure as variáveis apropriadas nos secrets do GitHub quando necessário.
 
 ## Tecnologias
 
