@@ -14,6 +14,10 @@ function transporter() {
 }
 
 export async function sendOtpEmail(to: string, code: string) {
+  console.log("Iniciando envio de e-mail OTP para:", to);
+  await transporter().verify();
+  console.log("Conexao SMTP realizada com sucesso.");
+
   await transporter().sendMail({
     from: process.env.EMAIL_FROM || process.env.SMTP_USER,
     to,
