@@ -10,7 +10,7 @@ export async function POST(request: Request) {
   try {
     const parsed = schema.safeParse(await request.json());
     if (!parsed.success) return NextResponse.json({ error: "Dados de compra inválidos." }, { status: 400 });
-    const lead = await prisma.lead.findUnique({ where: { email: parsed.data.email } });
+    const lead = await prisma.lead.findFirst({ where: { email: parsed.data.email } });
     if (!lead?.emailVerified) return NextResponse.json({ error: "Verifique seu e-mail antes de pagar." }, { status: 403 });
     const product = PRODUCTS[parsed.data.product as ProductKey];
     if (!process.env.MERCADOPAGO_ACCESS_TOKEN) return NextResponse.json({ error: "Pagamento ainda não configurado." }, { status: 503 });

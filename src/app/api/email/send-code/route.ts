@@ -10,7 +10,7 @@ export async function POST(request: Request) {
   try {
     const parsed = schema.safeParse(await request.json());
     if (!parsed.success) return NextResponse.json({ error: "Informe um e-mail válido." }, { status: 400 });
-    const lead = await prisma.lead.findUnique({ where: { email: parsed.data.email } });
+    const lead = await prisma.lead.findFirst({ where: { email: parsed.data.email } });
     if (!lead) return NextResponse.json({ error: "Não encontramos esse cadastro. Preencha o formulário primeiro." }, { status: 404 });
     if (lead.emailVerified) return NextResponse.json({ message: "E-mail já verificado." });
     const code = generateOtp();

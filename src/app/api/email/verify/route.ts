@@ -9,7 +9,7 @@ export async function POST(request: Request) {
   try {
     const parsed = schema.safeParse(await request.json());
     if (!parsed.success) return NextResponse.json({ error: "Informe o e-mail e o código de 6 dígitos." }, { status: 400 });
-    const lead = await prisma.lead.findUnique({ where: { email: parsed.data.email }, include: { otp: true } });
+    const lead = await prisma.lead.findFirst({ where: { email: parsed.data.email }, include: { otp: true } });
     if (!lead || !lead.otp) return NextResponse.json({ error: "Solicite um código antes de verificar." }, { status: 404 });
     const otp = lead.otp;
     if (otp.usedAt) return NextResponse.json({ error: "Este código já foi utilizado. Solicite outro." }, { status: 400 });
