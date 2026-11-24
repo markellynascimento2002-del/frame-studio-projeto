@@ -12,11 +12,16 @@ export async function POST(request: Request) {
   try {
     const parsed = leadSchema.safeParse(await request.json());
     if (!parsed.success) return NextResponse.json({ error: "Confira nome, e-mail e WhatsApp." }, { status: 400 });
-    const lead = await prisma.lead.upsert({
-      where: { email: parsed.data.email },
-      update: { name: parsed.data.name, whatsapp: parsed.data.whatsapp },
-      create: parsed.data
+    const existingLead = await prisma.lead.findFirst({
+      where: { email: parsed.data.email }
     });
+
+    const lead = existingLead
+      ? await prisma.lead.update({
+          where: { id: existingLead.id },
+          data: { name: parsed.data.name, whatsapp: parsed.data.whatsapp }
+        })
+      : await prisma.lead.create({ data: parsed.data });
     return NextResponse.json({ id: lead.id, message: "Lead cadastrado. Solicite o código de verificação para continuar." }, { status: 201 });
   } catch (error) {
     console.error("Erro ao cadastrar lead:", error);
