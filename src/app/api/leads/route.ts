@@ -18,7 +18,9 @@ export async function POST(request: Request) {
       create: parsed.data
     });
     return NextResponse.json({ id: lead.id, message: "Lead cadastrado. Solicite o código de verificação para continuar." }, { status: 201 });
-  } catch {
+  } catch (error) {
+    console.error("Erro ao cadastrar lead:", error);
     return NextResponse.json({ error: "Não foi possível salvar seus dados. Tente novamente." }, { status: 500 });
+    
   }
 }
