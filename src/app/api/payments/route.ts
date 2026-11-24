@@ -34,7 +34,8 @@ export async function POST(request: Request) {
     });
     await prisma.order.update({ where: { id: order.id }, data: { preferenceId: preference.id } });
     return NextResponse.json({ orderId: order.id, checkoutUrl: preference.init_point });
-  } catch {
+  } catch (error) {
+    console.error("Erro ao iniciar pagamento:", error);
     return NextResponse.json({ error: "Não foi possível iniciar o pagamento." }, { status: 500 });
   }
 }
